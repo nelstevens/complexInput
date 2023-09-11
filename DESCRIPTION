@@ -1,0 +1,14 @@
+Package: complexInput
+Title: Interconnected input elements into a single HTML widget.
+Version: 0.0.0.9000
+Authors@R: 
+    person("David", "Granjon", , "david@cynkra.com", role = c("aut", "cre"))
+Description: Proof of concept of embedding 2 'Bootstrap' input elements
+    into a single HTML widget. This reduces the number of inputs to handle on the
+    Shiny side. Typically, there is only 1 global input recovers which contains the
+    widget state and as many HTML inputs as we want. We also provide an example on
+    how to restore the widget state with the Shiny bookmarking capability.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
