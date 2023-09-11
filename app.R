@@ -1,5 +1,4 @@
 library(shiny)
-library(htmltools)
 
 ui <- function(req) {
   fluidPage(complexInputOutput("plop"))

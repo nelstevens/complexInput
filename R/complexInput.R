@@ -6,12 +6,15 @@
 #' TO DO: find a way to generalise this approach???
 #'
 #' @import htmlwidgets
+#' @import htmltools htmlDependency tagQuery
+#' @importFrom jsonlite toJSON
+#' @importFrom shinyWidgets pickerInput
 #'
 #' @export
 complexInput <- function(inputId, pickerOpts, textOpts, width = NULL, height = NULL, elementId = NULL) {
   
   # forward options using x
-  x = jsonlite::toJSON(
+  x = toJSON(
     list(
       id = inputId,
       opts = list(
@@ -24,14 +27,14 @@ complexInput <- function(inputId, pickerOpts, textOpts, width = NULL, height = N
   )
   
   # create widget
-  htmlwidgets::createWidget(
+  createWidget(
     name = 'complexInput',
     x,
     width = width,
     height = height,
     package = 'complexInput',
     elementId = elementId,
-    dependencies = htmltools::htmlDependency(
+    dependencies = htmlDependency(
       name = "select-picker",
       version = "1.0.0",
       src = c(href = "https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist"),
@@ -59,14 +62,14 @@ complexInput <- function(inputId, pickerOpts, textOpts, width = NULL, height = N
 #'
 #' @export
 complexInputOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'complexInput', width, height, package = 'complexInput')
+  shinyWidgetOutput(outputId, 'complexInput', width, height, package = 'complexInput')
 }
 
 #' @rdname complexInput-shiny
 #' @export
 renderComplexInput <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, complexInputOutput, env, quoted = TRUE)
+  shinyRenderWidget(expr, complexInputOutput, env, quoted = TRUE)
 }
 
 #' Custom picker input without shiny binding
@@ -75,7 +78,7 @@ renderComplexInput <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @export
 custom_picker <- function() {
   tagQuery(
-    shinyWidgets::pickerInput(
+    pickerInput(
       "test",
       "Test",
       colnames(iris)
