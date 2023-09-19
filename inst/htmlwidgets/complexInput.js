@@ -13,18 +13,9 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         // Get config + init HTML elements inside the widget tag
         var opts = x.opts;
-        $(el)
-          .append(`
-            <select 
-              class="selectpicker" 
-              data-shiny-no-bind-input
-              multiple="${opts.pickerOpts.multiple}" 
-              data-max-options="${opts.pickerOpts.dataMaxOptions}">
-              <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
-              <option data-tokens="mustard">Burger, Shake and a Smile</option>
-              <option data-tokens="frosting">Sugar, Spice and all things nice</option>
-            </select>
-          `);
+        // make empty object for holding pickervalues
+        opts.vals = {};
+        opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
         
         // Needs some delay since selectpicker is not available before ...
         // I suspect this is because Shiny now renders dependencies
@@ -40,27 +31,20 @@ HTMLWidgets.widget({
               .trigger('changed.bs.select');
           }
         }, 1000);
-        
-        $(el).append(`
-          <div class="form-group shiny-input-container">
-            <label class="control-label" id="text-label" for="text">${opts.textOpts.label}</label>
-            <input id="text" type="text" class="form-control" value="" data-shiny-no-bind-input placeholder="${opts.textOpts.placeholder}"/>
-          </div>
-        `);
-        
-        // Each time the picker changes, we update the textInput container
+        // Each time the picker changes, we update the list of selections
         // We could imagine a better example where we replace it by
         // another selectInput which conditionally depends on the first one.
         // This avoids to end up with 150 inputs on the R side ...
         $('select').on("changed.bs.select", function(e) {
-          // Get picker value
-          opts.pickerOpts.val = $(e.target).selectpicker('val');
-          // Update UI element
-          $(el).find('#text').val(opts.pickerOpts.val);
+          // Get picker value and append to vals list
+          opts.vals[e.target.id] = $(e.target).selectpicker('val');
+          // show child picker but hide other descendants
+          //
           // Notify R server
           // Save config for bookmarking
           Shiny.setInputValue(x.id + '_config', opts, {priority: 'event'});
         })
+        
 
       },
 
@@ -73,3 +57,19 @@ HTMLWidgets.widget({
     };
   }
 });
+// custom function to append pickerinput
+appendPicker = function(el, pickerOpts, opts, x) {
+  el
+    .append(`
+              <select 
+                id="${pickerOpts.id}"
+                class="selectpicker" 
+                data-shiny-no-bind-input
+                multiple="${pickerOpts.multiple}" 
+                data-max-options="${pickerOpts.dataMaxOptions}">
+                <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+                <option data-tokens="mustard">Burger, Shake and a Smile</option>
+                <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+              </select>
+            `);
+}

@@ -11,7 +11,9 @@ server <- function(input, output, session) {
     reactiveValuesToList(input)
     session$doBookmark()
   })
-  
+  observeEvent(input$plop_config, {
+    cat(str(input$plop))
+  })
   onBookmarked(function(url) {
     # TO DO: encode URL to reduce nchar ...
     updateQueryString(url)
@@ -27,15 +29,13 @@ server <- function(input, output, session) {
   output$plop <- renderComplexInput({
     # Load from empty state
     conf <- if (length(vals$widget_config) == 0) {
+      # make list with config for four pickerinputs
       list(
-        pickerOpts = list(
-          multiple = TRUE,
-          dataMaxOptions = 2
-        ),
-        textOpts = list(
-          label = "My super text Input",
-          placeholder = "my custom placeholder"
-        )
+      pickerOpts = purrr::map(1:4, \(x) {
+        list(id = paste0("picker-", x),
+             multiple = TRUE,
+             dataMaxOptions = 2)
+      })
       )
     } else {
       # Load from bookmarked config
@@ -47,8 +47,7 @@ server <- function(input, output, session) {
     
     complexInput(
       inputId = "plop",
-      pickerOpts = conf$pickerOpts,
-      textOpts = conf$textOpts
+      pickerOpts = conf$pickerOpts
     )
   })
   

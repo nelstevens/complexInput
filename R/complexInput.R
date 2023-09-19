@@ -11,15 +11,14 @@
 #' @importFrom shinyWidgets pickerInput
 #'
 #' @export
-complexInput <- function(inputId, pickerOpts, textOpts, width = NULL, height = NULL, elementId = NULL) {
+complexInput <- function(inputId, pickerOpts, width = NULL, height = NULL, elementId = NULL) {
   
   # forward options using x
   x = toJSON(
     list(
       id = inputId,
       opts = list(
-        pickerOpts = pickerOpts,
-        textOpts = textOpts
+        pickerOpts = pickerOpts
       )
     ), 
     auto_unbox = TRUE, 
