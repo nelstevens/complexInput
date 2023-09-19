@@ -41,8 +41,18 @@ HTMLWidgets.widget({
           if (opts.vals === undefined) {opts.vals = {}}
           // Get picker value and append to vals list
           opts.vals[e.target.id] = $(e.target).selectpicker('val');
+          // copy e to avoid optimizing out (@david is there a better way?)
+          ev = e;
+          // get index of target
+          ind = $(el).find("select").index($(e.target));
           // show child picker but hide other descendants
-          //
+          $(el).find("select").each((idx, elm) => {
+            if (idx > ind + 1) {
+              $(elm).selectpicker("hide");
+            } else {
+              $(elm).selectpicker("show");
+            }
+          });
           // Notify R server
           // Save config for bookmarking
           Shiny.setInputValue(x.id + '_config', opts, {priority: 'event'});
