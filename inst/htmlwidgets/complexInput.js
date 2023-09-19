@@ -14,7 +14,7 @@ HTMLWidgets.widget({
         // Get config + init HTML elements inside the widget tag
         var opts = x.opts;
         // make empty object for holding pickervalues
-        opts.vals = {};
+        //opts.vals = {};
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
         
         // Needs some delay since selectpicker is not available before ...
@@ -25,10 +25,12 @@ HTMLWidgets.widget({
           // See https://developer.snapappointments.com/bootstrap-select/ API
           $selectEl.selectpicker('show');
           console.log(opts.pickerOpts.val);
-          if (opts.pickerOpts.val !== undefined) {
-            $selectEl
-              .selectpicker('val', opts.pickerOpts.val)
-              .trigger('changed.bs.select');
+          if (opts.vals !== undefined) {
+            Object.keys(opts.vals).forEach(elm => {
+              $("#" + elm)
+                .selectpicker('val', opts.vals[elm])
+                .trigger('changed.bs.select');
+            });
           }
         }, 1000);
         // Each time the picker changes, we update the list of selections
@@ -36,6 +38,7 @@ HTMLWidgets.widget({
         // another selectInput which conditionally depends on the first one.
         // This avoids to end up with 150 inputs on the R side ...
         $('select').on("changed.bs.select", function(e) {
+          if (opts.vals === undefined) {opts.vals = {}}
           // Get picker value and append to vals list
           opts.vals[e.target.id] = $(e.target).selectpicker('val');
           // show child picker but hide other descendants

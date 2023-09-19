@@ -12,7 +12,7 @@ server <- function(input, output, session) {
     session$doBookmark()
   })
   observeEvent(input$plop_config, {
-    cat(str(input$plop))
+    cat(str(input$plop_config))
   })
   onBookmarked(function(url) {
     # TO DO: encode URL to reduce nchar ...
@@ -44,10 +44,9 @@ server <- function(input, output, session) {
       # Third choice: http://127.0.0.1:4082/?_inputs_&plop_config=%7B%22pickerOpts%22%3A%7B%22multiple%22%3Atrue%2C%22dataMaxOptions%22%3A2%2C%22val%22%3A%5B%22Sugar%2C%20Spice%20and%20all%20things%20nice%22%5D%7D%2C%22textOpts%22%3A%7B%22label%22%3A%22My%20super%20text%20Input%22%2C%22placeholder%22%3A%22my%20custom%20placeholder%22%7D%7D
        vals$widget_config
     }
-    
     complexInput(
       inputId = "plop",
-      pickerOpts = conf$pickerOpts
+      pickerOpts = conf
     )
   })
   

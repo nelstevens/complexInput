@@ -17,9 +17,7 @@ complexInput <- function(inputId, pickerOpts, width = NULL, height = NULL, eleme
   x = toJSON(
     list(
       id = inputId,
-      opts = list(
-        pickerOpts = pickerOpts
-      )
+      opts = pickerOpts
     ), 
     auto_unbox = TRUE, 
     pretty = TRUE
