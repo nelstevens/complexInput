@@ -23,7 +23,6 @@ HTMLWidgets.widget({
         setTimeout(function() {
           var $selectEl = $(el).find('select');
           // See https://developer.snapappointments.com/bootstrap-select/ API
-          $selectEl.selectpicker('show');
           console.log(opts.pickerOpts.val);
           if (opts.vals !== undefined) {
             Object.keys(opts.vals).forEach(elm => {
@@ -31,6 +30,8 @@ HTMLWidgets.widget({
                 .selectpicker('val', opts.vals[elm])
                 .trigger('changed.bs.select');
             });
+          } else {
+            $selectEl.first().selectpicker("show");
           }
         }, 1000);
         // Each time the picker changes, we update the list of selections
