@@ -13,10 +13,9 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         // Get config + init HTML elements inside the widget tag
         var opts = x.opts;
-        // make empty object for holding pickervalues
-        //opts.vals = {};
         // append checkbox and initiate observer
         appendCheckbox($(el), 'hello2');
+        // append first array of pickerinputs
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
         //  wrap div around first set of selects
         $(el).find("select").wrapAll("<div id='hello'>");
@@ -105,7 +104,6 @@ appendCheckbox = function(el, div2id) {
     </div>
   `)
   $("#checkbox1").on("change", function(e) {
-    debugger;
     if (e.target.checked) {
       $("#" + div2id).css("visibility", "visible");
     } else {
