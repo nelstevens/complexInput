@@ -15,8 +15,22 @@ HTMLWidgets.widget({
         var opts = x.opts;
         // make empty object for holding pickervalues
         //opts.vals = {};
+        // append checkbox
+        $(el).append(`
+            <div class="checkbox">
+              <input type="checkbox" id="checkbox1">
+              <label for="checkbox1">
+                  enable second array of pickers
+              </label>
+            </div>
+        `)
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
-        
+        //  wrap div around first set of selects
+        $(el).find("select").wrapAll("<div id='hello'>");
+        // create second group of selects
+        opts.pickerOpts2.forEach(y => appendPicker($(el), y, opts, x));
+        // wrap residual selects in div
+        $(el).find("select").not("#hello > select").wrapAll("<div id='hello2'>");
         // Needs some delay since selectpicker is not available before ...
         // I suspect this is because Shiny now renders dependencies
         // asynchroneously, while before they were all loaded at start.

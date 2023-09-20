@@ -6,7 +6,7 @@
 #' TO DO: find a way to generalise this approach???
 #'
 #' @import htmlwidgets
-#' @import htmltools htmlDependency tagQuery
+#' @importFrom htmltools htmlDependency tagQuery
 #' @importFrom jsonlite toJSON
 #' @importFrom shinyWidgets pickerInput
 #'
@@ -31,12 +31,20 @@ complexInput <- function(inputId, pickerOpts, width = NULL, height = NULL, eleme
     height = height,
     package = 'complexInput',
     elementId = elementId,
-    dependencies = htmlDependency(
-      name = "select-picker",
-      version = "1.0.0",
-      src = c(href = "https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist"),
-      stylesheet = "css/bootstrap-select.min.css",
-      script = "js/bootstrap-select.min.js"
+    dependencies = list(
+      htmlDependency(
+        name = "select-picker",
+        version = "1.0.0",
+        src = c(href = "https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist"),
+        stylesheet = "css/bootstrap-select.min.css",
+        script = "js/bootstrap-select.min.js"
+      ),
+      htmlDependency(
+        name = "checkbox",
+        version = "1.0.1",
+        src = c(href = "https://cdn.jsdelivr.net/npm/awesome-bootstrap-checkbox@1.0.1"),
+        stylesheet = "awesome-bootstrap-checkbox.min.css"
+      )
     )
   )
 }

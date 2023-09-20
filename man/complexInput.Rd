@@ -7,7 +7,6 @@
 complexInput(
   inputId,
   pickerOpts,
-  textOpts,
   width = NULL,
   height = NULL,
   elementId = NULL
