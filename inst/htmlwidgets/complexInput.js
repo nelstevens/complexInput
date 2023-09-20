@@ -15,15 +15,8 @@ HTMLWidgets.widget({
         var opts = x.opts;
         // make empty object for holding pickervalues
         //opts.vals = {};
-        // append checkbox
-        $(el).append(`
-            <div class="checkbox">
-              <input type="checkbox" id="checkbox1">
-              <label for="checkbox1">
-                  enable second array of pickers
-              </label>
-            </div>
-        `)
+        // append checkbox and initiate observer
+        appendCheckbox($(el), 'hello2');
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
         //  wrap div around first set of selects
         $(el).find("select").wrapAll("<div id='hello'>");
@@ -100,4 +93,26 @@ appendPicker = function(el, pickerOpts, opts, x) {
                 <option data-tokens="frosting">Sugar, Spice and all things nice</option>
               </select>
             `);
+}
+// custom function to append checkbox and iniate observer
+appendCheckbox = function(el, div2id) {
+  el.append(`
+    <div class="checkbox">
+      <input type="checkbox" id="checkbox1">
+      <label for="checkbox1">
+          enable second array of pickers
+      </label>
+    </div>
+  `)
+  $("#checkbox1").on("change", function(e) {
+    debugger;
+    if (e.target.checked) {
+      $("#" + div2id).css("visibility", "visible");
+    } else {
+      $("#" + div2id).css("visibility", "hidden");
+    }
+  });
+  setTimeout(function() {
+     $("#checkbox1").trigger("change");
+  }, 1000)
 }
