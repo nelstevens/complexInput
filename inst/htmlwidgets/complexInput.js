@@ -22,7 +22,7 @@ HTMLWidgets.widget({
         // create second group of selects
         opts.pickerOpts2.forEach(y => appendPicker($(el), y, opts, x));
         // wrap residual selects in div
-        $(el).find("select").not("#hello > select").wrapAll("<div id='hello2'>");
+        $(el).find("select").not("#hello select").wrapAll("<div id='hello2'>");
         // Needs some delay since selectpicker is not available before ...
         // I suspect this is because Shiny now renders dependencies
         // asynchroneously, while before they were all loaded at start.
@@ -95,6 +95,7 @@ appendPicker = function(el, pickerOpts, opts, x) {
 }
 // custom function to append checkbox and iniate observer
 appendCheckbox = function(el, div2id) {
+  // append checkbox
   el.append(`
     <div class="checkbox">
       <input type="checkbox" id="checkbox1">
@@ -103,14 +104,18 @@ appendCheckbox = function(el, div2id) {
       </label>
     </div>
   `)
+  // after DOM loaded trigger change event
+    setTimeout(function() {
+     $("#checkbox1").trigger("change");
+  }, 1000)
+  // handle visibility and values of second picker array
   $("#checkbox1").on("change", function(e) {
     if (e.target.checked) {
       $("#" + div2id).css("visibility", "visible");
     } else {
       $("#" + div2id).css("visibility", "hidden");
+      // clear all pickers in second array
+      $(el).find("#hello2 select").selectpicker('val', null);
     }
   });
-  setTimeout(function() {
-     $("#checkbox1").trigger("change");
-  }, 1000)
 }
