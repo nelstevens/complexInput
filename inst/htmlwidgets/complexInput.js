@@ -17,6 +17,8 @@ HTMLWidgets.widget({
         appendCheckbox($(el), 'hello2');
         // append first array of pickerinputs
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
+        // define selected values if necessary
+        if (opts.vals === undefined) {opts.vals = {}}
         //  wrap div around first set of selects
         $(el).find("select").wrapAll("<div id='hello'>");
         // create second group of selects
@@ -48,27 +50,28 @@ HTMLWidgets.widget({
         // We could imagine a better example where we replace it by
         // another selectInput which conditionally depends on the first one.
         // This avoids to end up with 150 inputs on the R side ...
-        $('select').on("changed.bs.select", function(e) {
-          if (opts.vals === undefined) {opts.vals = {}}
-          // Get picker value and append to vals list
-          opts.vals[e.target.id] = $(e.target).selectpicker('val');
-          // copy e to avoid optimizing out (@david is there a better way?)
-          ev = e;
-          // get id of div surrounding pickerarray
-          divid = $(e.target).parents("div[id^='hello']").attr("id")
-          // get index of target
-          ind = $(el).find(`#${divid} select`).index($(e.target));
-          // show child picker but hide other descendants
-          $(el).find(`#${divid} select`).each((idx, elm) => {
-            if (idx > ind + 1) {
-              $(elm).selectpicker("hide");
-            } else {
-              $(elm).selectpicker("show");
-            }
-          });
-          // Notify R server
-          // Save config for bookmarking
-          Shiny.setInputValue(x.id + '_config', opts, {priority: 'event'});
+        $('select').on("changed.bs.select", function(e, clickedIndex) {
+          if (clickedIndex !== null) {
+            // Get picker value and append to vals list
+            opts.vals[e.target.id] = $(e.target).selectpicker('val');
+            // get id of div surrounding pickerarray
+            divid = $(e.target).parents("div[id^='hello']").attr("id")
+            // get index of target
+            ind = $(el).find(`#${divid} select`).index($(e.target));
+            // show child picker but hide other descendants
+            $(el).find(`#${divid} select`).each((idx, elm) => {
+              if (idx > ind + 1) {
+                $(elm).selectpicker("hide");
+                // FIXME: setting picker to null triggers changes event which we don't want
+                $(elm).selectpicker("val", null);
+              } else {
+                $(elm).selectpicker("show");
+              }
+            });
+            // Notify R server
+            // Save config for bookmarking
+            Shiny.setInputValue(x.id + '_config', opts, {priority: 'event'});
+          }
         })
         
 
@@ -118,10 +121,12 @@ appendCheckbox = function(el, div2id) {
   $("#checkbox1").on("change", function(e) {
     if (e.target.checked) {
       $("#" + div2id).css("visibility", "visible");
+      $(el).find("#hello2 select").first().selectpicker('show');
     } else {
       $("#" + div2id).css("visibility", "hidden");
       // clear all pickers in second array
       $(el).find("#hello2 select").selectpicker('val', null);
+      $(el).find("#hello2 select").selectpicker('hide');
     }
   });
 }
