@@ -30,7 +30,11 @@ HTMLWidgets.widget({
           var $selectEl = $(el).find('select');
           // See https://developer.snapappointments.com/bootstrap-select/ API
           console.log(opts.pickerOpts.val);
-          if (opts.vals !== undefined) {
+          // if all vals empty simply show first picker
+          allEmpty = Object.keys(opts.vals).every(function(key){
+            return opts.vals[key].length === 0
+          })
+          if (!allEmpty) {
             Object.keys(opts.vals).forEach(elm => {
               $("#" + elm)
                 .selectpicker('val', opts.vals[elm])
@@ -50,10 +54,12 @@ HTMLWidgets.widget({
           opts.vals[e.target.id] = $(e.target).selectpicker('val');
           // copy e to avoid optimizing out (@david is there a better way?)
           ev = e;
+          // get id of div surrounding pickerarray
+          divid = $(e.target).parents("div[id^='hello']").attr("id")
           // get index of target
-          ind = $(el).find("select").index($(e.target));
+          ind = $(el).find(`#${divid} select`).index($(e.target));
           // show child picker but hide other descendants
-          $(el).find("select").each((idx, elm) => {
+          $(el).find(`#${divid} select`).each((idx, elm) => {
             if (idx > ind + 1) {
               $(elm).selectpicker("hide");
             } else {
