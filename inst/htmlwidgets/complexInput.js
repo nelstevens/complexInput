@@ -62,7 +62,9 @@ HTMLWidgets.widget({
             $(el).find(`#${divid} select`).each((idx, elm) => {
               if (idx > ind + 1) {
                 $(elm).selectpicker("hide");
-                // FIXME: setting picker to null triggers changes event which we don't want
+                $(elm).selectpicker("val", null);
+              } else if (idx == ind + 1) {
+                $(elm).selectpicker("show");
                 $(elm).selectpicker("val", null);
               } else {
                 $(elm).selectpicker("show");
