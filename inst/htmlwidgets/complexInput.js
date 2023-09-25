@@ -15,10 +15,10 @@ HTMLWidgets.widget({
         var opts = x.opts;
         // append checkbox and initiate observer
         appendCheckbox($(el), 'hello2');
+        // define selected values if necessary
+        if (opts.vals === undefined) {opts.vals = makeVals(opts);}
         // append first array of pickerinputs
         opts.pickerOpts.forEach(y => appendPicker($(el), y, opts, x));
-        // define selected values if necessary
-        if (opts.vals === undefined) {opts.vals = {}}
         //  wrap div around first set of selects
         $(el).find("select").wrapAll("<div id='hello'>");
         // create second group of selects
@@ -131,4 +131,19 @@ appendCheckbox = function(el, div2id) {
       $(el).find("#hello2 select").selectpicker('hide');
     }
   });
+}
+
+// make Object that holds inputs
+makeVals = function(opts) {
+  vals = Object.keys(opts)
+    .filter(el => el.match("picker"))
+    .map(ke => {
+      return(opts[ke].map(a => {
+        return(a.id)
+      }))
+    })
+    .flat();
+    debugger;
+  vals_Obj = vals.reduce((acc, cur) => {acc[cur] = []; return(acc)}, {})
+  return(vals_Obj)
 }
