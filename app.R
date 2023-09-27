@@ -34,7 +34,9 @@ server <- function(input, output, session) {
       pickerOpts = purrr::map(1:4, \(x) {
         list(id = paste0("picker-", x),
              multiple = TRUE,
-             dataMaxOptions = 2)
+             dataMaxOptions = 2
+             # TODO: pass in dependency here
+             )
       }),
       checkbox = list(
         id = "chkbx"

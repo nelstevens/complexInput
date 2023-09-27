@@ -31,6 +31,7 @@ complexInput <- function(inputId, pickerOpts, width = NULL, height = NULL, eleme
     height = height,
     package = 'complexInput',
     elementId = elementId,
+    # replace this with something from opts
     dependencies = list(
       htmlDependency(
         name = "select-picker",
@@ -39,6 +40,7 @@ complexInput <- function(inputId, pickerOpts, width = NULL, height = NULL, eleme
         stylesheet = "css/bootstrap-select.min.css",
         script = "js/bootstrap-select.min.js"
       ),
+      # this dep is technically not needed!
       htmlDependency(
         name = "checkbox",
         version = "1.0.1",
