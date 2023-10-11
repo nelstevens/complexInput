@@ -140,6 +140,7 @@ appendCheckbox = function(el, div2id) {
     if (e.target.checked) {
       $("#" + div2id).css("visibility", "visible");
       $(el).find("#hello2 select").first().selectpicker('show');
+      $("#subbtn").css("visibility", "hidden");
     } else {
       $("#" + div2id).css("visibility", "hidden");
       // clear all pickers in second array
