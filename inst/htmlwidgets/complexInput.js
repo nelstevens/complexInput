@@ -25,6 +25,12 @@ HTMLWidgets.widget({
         opts.pickerOpts2.forEach(y => appendPicker($(el), y, opts, x));
         // wrap residual selects in div
         $(el).find("select").not("#hello select").wrapAll("<div id='hello2'>");
+        // add submit button
+        $(el).append(
+          `
+          <button id="subbtn" type="button" class="btn btn-default action-button">Karte generieren</button>
+          `
+        );
         // Needs some delay since selectpicker is not available before ...
         // I suspect this is because Shiny now renders dependencies
         // asynchroneously, while before they were all loaded at start.
@@ -70,6 +76,16 @@ HTMLWidgets.widget({
                 $(elm).selectpicker("show");
               }
             });
+            // toggle submit button visibility
+            if (ind === $(el).find(`#${divid} select`).length - 1) {
+              if (divid == "hello" && (!$("#checkbox1")[0].checked | $("#hello2 select").last().val().length !== 0)) {
+                $("#subbtn").css("visibility", "visible");
+              } else if (divid == "hello2" && $("#checkbox1")[0].checked) {
+                $("#subbtn").css("visibility", "visible");
+              } 
+            } else {
+                $("#subbtn").css("visibility", "hidden");
+              }
             // Notify R server
             // Save config for bookmarking
             Shiny.setInputValue(x.id + '_config', opts, {priority: 'event'});
@@ -143,7 +159,6 @@ makeVals = function(opts) {
       }))
     })
     .flat();
-    debugger;
   vals_Obj = vals.reduce((acc, cur) => {acc[cur] = []; return(acc)}, {})
   return(vals_Obj)
 }
