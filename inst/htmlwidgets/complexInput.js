@@ -28,7 +28,7 @@ HTMLWidgets.widget({
         // add submit button
         $(el).append(
           `
-          <button id="subbtn" type="button" class="btn btn-default action-button">Karte generieren</button>
+          <button id="subbtn" type="button" class="btn btn-default action-button" style="visibility: hidden;">Karte generieren</button>
           `
         );
         // Needs some delay since selectpicker is not available before ...
